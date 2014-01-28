@@ -32,9 +32,6 @@ class Stroke extends ItemView
   #   # Maybe an image of the stroke? We can figure this out later.
   #   '.stroke': \path
 
-  initialize: (options = {}) ->
-    super ...
-    console.log @model.get \created
 
 module.exports = class Strokes extends CollectionView
 
@@ -45,3 +42,35 @@ module.exports = class Strokes extends CollectionView
   list-selector: \.stroke-items
 
   template: CollectionTemplate
+
+  state-bindings:
+    '.stroke-menu-icon':
+      observe: \menu
+      attributes: [
+        * name: \class
+          on-get: (open) -> switch open
+          | true => \icon-chevron-up
+          | _ => \icon-chevron-down
+      ]
+      update-view: false
+
+  events:
+    'click .stroke-menu': (event) ->
+      event.stop-propagation!
+
+      # Toggle the strokes preview
+
+      # Toggle the stroke list.
+      @$ 'ul.stroke-items' .slide-toggle 250_ms
+      @$el.toggle-class \active
+      # Toggle the state model.
+      @stroke-state.set \menu, not @stroke-state.get \menu
+
+  initialize: (options = {}) ->
+    super ...
+    @stroke-state = options.stroke-state
+
+  render: ->
+    super ...
+    @stickit @stroke-state, @state-bindings
+

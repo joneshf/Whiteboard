@@ -2,25 +2,45 @@ $namespace: 'canvas-strokes';
 
 .#{$namespace} {
   padding: 3px;
+  padding-top: 0px;
   position: absolute;
   right: 5px;
-  top: 2px;
-  width: 150px;
+  top: 0px;
+  bottom: 2px;
+  width: 156px;
+  overflow-y: auto;
+  overflow-x: hidden;
   @include wb-font($size: 14pt);
 }
 .#{$namespace} #strokes-list {
-  overflow-y: hidden;
+  &:hover, &.active {
+    box-shadow: -2px 1px 2px 0px rgba(#555, 0.3);
+  }
 }
 .#{$namespace} #strokes-list .stroke-menu {
   border-bottom: $wb-border;
+  min-width: 150px;
+  height: 27px;
+  line-height: 27px;
+  & > span {
+    float: right;
+    margin-right: 15px;
+  }
+  & > [class*="icon-"] {
+    padding-left: 3px;
+  }
 }
 .#{$namespace} #strokes-list .stroke-items {
+  display: none;
   margin: 0px;
   padding: 0px;
   list-style-type: none;
+  // &:visible {  }
 }
 .#{$namespace} #strokes-list .stroke-items .stroke-item {
   border-bottom: $wb-border;
+  padding: 5px;
+  padding-right: 0px;
   .created {
     @include wb-font($size: 9pt);
   }

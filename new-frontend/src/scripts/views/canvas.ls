@@ -18,10 +18,6 @@ module.exports = class Stroke extends ItemView
 
   class-name: \canvas-stroke
 
-  initialize: (options = {}) ->
-    super ...
-    console.log options
-
 module.exports = class Canvas extends CollectionView
 
   id: \canvas
@@ -51,6 +47,7 @@ module.exports = class Canvas extends CollectionView
 
   events:
     'click .menu-selector > .toggle-switch': (event) ->
+      # !TODO: This here still propagates to the mousedown event.
       event.stop-propagation!
 
       # Toggle the menu.
@@ -59,25 +56,25 @@ module.exports = class Canvas extends CollectionView
       # Toggle the state of the menu.
       @state.set \menu, not @state.get \menu
 
-    'mousedown': (event) ->
-      console.log event.src-element
-      if event.target is @$ \.toggle-switch
-        console.log \menu
+    # "mousedown :not([class*='toggle'])": (event) ->
+    #   console.log event.src-element
+    #   if event.target is @$ \.toggle-switch
+    #     console.log \menu
 
-      switch event.button
-      # Only catch the left mouse click
-      | 0 =>
-        # Fade out the title screen.
-        @$ '.title' .fade-out 250_ms
+    #   switch event.button
+    #   # Only catch the left mouse click
+    #   | 0 =>
+    #     # Fade out the title screen.
+    #     @$ '.title' .fade-out 250_ms
 
-        # More custom logic.
-        console.log 'Instantiate a brush stroke?'
+    #     # More custom logic.
+    #     console.log 'Instantiate a brush stroke?'
 
-      # We can add different functionality to other buttons.
-      | _ =>
-        # Let the model know that its time to change.
-        @model.set \changed, moment!
-        console.log 'Unreserved mouse action.'
+    #   # We can add different functionality to other buttons.
+    #   | _ =>
+    #     # Let the model know that its time to change.
+    #     @model.set \changed, moment!
+    #     console.log 'Unreserved mouse action.'
 
     'mouseup': (event) -> switch event.button
     # Only catch the left mouse click
@@ -97,6 +94,26 @@ module.exports = class Canvas extends CollectionView
         | 90_z =>
           # Undo function call here.
           console.log 'undo function'
+
+    $ window .on "mousedown :not([class*='toggle'])", (event) ~>
+      console.log event.src-element
+      if event.target is @$ \.toggle-switch
+        console.log \menu
+
+      switch event.button
+      # Only catch the left mouse click
+      | 0 =>
+        # Fade out the title screen.
+        @$ '.title' .fade-out 250_ms
+
+        # More custom logic.
+        console.log 'Instantiate a brush stroke?'
+
+      # We can add different functionality to other buttons.
+      | _ =>
+        # Let the model know that its time to change.
+        @model.set \changed, moment!
+        console.log 'Unreserved mouse action.'
 
   render: ->
     super ...

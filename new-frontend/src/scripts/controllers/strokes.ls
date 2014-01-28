@@ -13,12 +13,18 @@ module.exports = class IndexController extends Controller
 
     canvas_id = cookie.get \canvas_id
 
+    # This is just a bogus collection of strokes.
+    # TODO! Remove this when we have actual stroke models
+    # generated.
     @collection = new chaplin.Collection
 
+    @stroke-state = new chaplin.Model {menu: false}
+
     for num in [1 til 10]
-      number = 140 + num
+      width = 140 + num
+      height = 100 + num
       model = new chaplin.Model {
-        preview: "http://www.placekitten.com/#number/#number"
+        preview: "http://www.placekitten.com/#width/#height"
         stroke_number: num
         created: moment!
       }
@@ -30,6 +36,7 @@ module.exports = class IndexController extends Controller
       @collection.push model
 
     @view = new StrokesView {
+      stroke-state: @stroke-state
       collection: @collection
       region: \canvas:strokes
       +auto-render
