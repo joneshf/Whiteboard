@@ -3,14 +3,13 @@
 require! chaplin
 require! cookie
 
-require! Controller: 'lib/controllers/canvas'
+require! Controller: 'lib/controllers/menu'
 
 require! StrokesView: 'views/strokes'
 
 module.exports = class IndexController extends Controller
 
   strokes: ->
-
     canvas_id = cookie.get \canvas_id
 
     # This is just a bogus collection of strokes.
@@ -20,24 +19,30 @@ module.exports = class IndexController extends Controller
 
     @stroke-state = new chaplin.Model {menu: false}
 
-    for num in [1 til 10]
-      width = 140 + num
-      height = 100 + num
-      model = new chaplin.Model {
-        preview: "http://www.placekitten.com/#width/#height"
-        stroke_number: num
-        created: moment!
-      }
-      @collection.push model
-
-    console.log @collection
-
+    # Catch the add event from the canvas view.
     @subscribe-event 'stroke:add', (model) ~>
-      @collection.push model
+      @collection.unshift model
 
-    @view = new StrokesView {
-      stroke-state: @stroke-state
-      collection: @collection
-      region: \canvas:strokes
-      +auto-render
-    }
+    @subscribe-event 'render:strokes', (user) ~>
+
+      for num in [1 til 10]
+        width = 140 + num
+        height = 100 + num
+        model = new chaplin.Model {
+          preview: "http://www.placekitten.com/#width/#height"
+          stroke_number: num
+          created: do
+            user: chaplin.mediator.settings.user
+            time: moment!
+        }
+        # Add the most recent stroke to the top of the list.
+        @collection.unshift model
+
+      @view = new StrokesView {
+        user: chaplin.mediator.settings.user
+        stroke-state: @stroke-state
+        collection: @collection
+        region: \canvas:strokes
+        +auto-render
+      }
+

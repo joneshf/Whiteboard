@@ -1,0 +1,70 @@
+$namespace: 'menu';
+
+// Overlay class covers the whole screen.
+// --------------------------------------
+.overlay {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+##{$namespace} .title {
+  @extend .overlay;
+}
+
+// Menu styling.
+// -------------
+##{$namespace} .menu-selector {
+  cursor: pointer;
+  display: none;
+  padding-left: 5px;
+  width: 150px;
+  @include wb-font($size: 14pt);
+}
+##{$namespace} .menu-selector .toggle-switch {
+  border-bottom: $wb-border;
+  padding: 3px;
+  @include user-select(none);
+  &:hover, &.active {
+    box-shadow: 2px 0 1px 1px rgba(#555, 0.3);
+  }
+  [class*="icon-"] {
+    float: right;
+  }
+}
+##{$namespace} .menu-selector .menu-items {
+  display: none;
+  margin: 0px;
+  padding: 0px;
+}
+##{$namespace} .menu-selector .menu-items li {
+  border-bottom: $wb-border;
+  font-size: 12pt;
+  padding: 5px 2px;
+  @include user-select(none);
+  & > [class*="icon-"] {
+    color: #574E4E;
+    margin-right: 3px;
+  }
+  &:hover span {
+    color: $wb-active-text;
+  }
+}
+##{$namespace} .title {
+  background: rgba(0,0,0,0.15);
+}
+##{$namespace} .title .user-form {
+  left: 45%;
+  position: absolute;
+  top: 45%;
+  @include user-select(none);
+  @include wb-font($size: 14pt);
+  input, label {
+    display: block;
+  }
+  button {
+    font-weight: bold;
+  }
+}

@@ -1,15 +1,16 @@
 $namespace: 'canvas-strokes';
 
 .#{$namespace} {
+  bottom: 2px;
+  cursor: pointer;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: 3px;
   padding-top: 0px;
   position: absolute;
   right: 5px;
   top: 0px;
-  bottom: 2px;
   width: 156px;
-  overflow-y: auto;
-  overflow-x: hidden;
   @include wb-font($size: 14pt);
 }
 .#{$namespace} #strokes-list {
@@ -19,9 +20,9 @@ $namespace: 'canvas-strokes';
 }
 .#{$namespace} #strokes-list .stroke-menu {
   border-bottom: $wb-border;
+  height: 30px;
+  line-height: 30px;
   min-width: 150px;
-  height: 27px;
-  line-height: 27px;
   & > span {
     float: right;
     margin-right: 15px;
@@ -32,20 +33,20 @@ $namespace: 'canvas-strokes';
 }
 .#{$namespace} #strokes-list .stroke-items {
   display: none;
+  list-style-type: none;
   margin: 0px;
   padding: 0px;
-  list-style-type: none;
   // &:visible {  }
 }
 .#{$namespace} #strokes-list .stroke-items .stroke-item {
   border-bottom: $wb-border;
   padding: 5px;
   padding-right: 0px;
-  .created {
+  .created, .author {
     @include wb-font($size: 9pt);
   }
   .preview {
-    width: 140px;
-    height: 100px;
+    height: 90px;
+    width: 130px;
   }
 }

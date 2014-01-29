@@ -44,8 +44,8 @@ $FontAwesomePath: "/components/font-awesome/font";
 
 // Modules
 // -------
-// @import "components/bootstrap-sass/lib/variables";
-// @import "components/bootstrap-sass/lib/mixins";
+@import "components/bootstrap-sass/lib/variables";
+@import "components/bootstrap-sass/lib/mixins";
 // @import "components/bootstrap-sass/lib/reset";
 // @import "components/bootstrap-sass/lib/scaffolding";
 // @import "components/bootstrap-sass/lib/grid";
@@ -58,7 +58,7 @@ $FontAwesomePath: "/components/font-awesome/font";
 // @import "components/bootstrap-sass/lib/wells";
 // @import "components/bootstrap-sass/lib/component-animations";
 // @import "components/bootstrap-sass/lib/close";
-// @import "components/bootstrap-sass/lib/buttons";
+@import "components/bootstrap-sass/lib/buttons";
 // @import "components/bootstrap-sass/lib/button-groups";
 // @import "components/bootstrap-sass/lib/alerts";
 // @import "components/bootstrap-sass/lib/navs";
@@ -95,6 +95,7 @@ $wb-active-text: #179ef8;
 // Modules
 // -------
 @import "mixins";
+@import "views/menu";
 @import "views/canvas";
 @import "views/strokes";
 

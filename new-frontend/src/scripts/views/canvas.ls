@@ -1,14 +1,16 @@
 'use strict'
 
+require! chaplin
+
 # Moment for timestamps.
 require! moment
 
 # Require our base views.
-require! ItemView: 'lib/views/collection-view'
-require! CollectionView: 'lib/views/view'
+require! ItemView: 'lib/views/view'
+require! CollectionView: 'lib/views/collection-view'
 
-require! ItemTemplate: 'templates/stroke'
-require! CollectionTemplate: 'templates/canvas'
+require! ItemTemplate: 'templates/canvas/stroke'
+require! CollectionTemplate: 'templates/canvas/canvas'
 
 module.exports = class Stroke extends ItemView
 
@@ -32,6 +34,18 @@ module.exports = class Canvas extends CollectionView
     'canvas:strokes': \.canvas-strokes
 
   state-bindings:
+    '.user-email': \user
+
+    '.user-form > button':
+      observe: \user
+      attributes: [
+        * name: \disabled
+          on-get: (user) -> switch user
+          | '' => true
+          | _ => false
+      ]
+      update-view: false
+
     '.menu-icon':
       observe: \menu
       attributes: [
@@ -46,6 +60,17 @@ module.exports = class Canvas extends CollectionView
   ctrl-z: (event)-> event.which is 90_z and event.ctrl-key
 
   events:
+    'submit': (event) ->
+      event.prevent-default!
+
+      # Let the strokes view know we are starting this thing.
+      @publish-event 'render:strokes', @state.get \user
+
+      # Hide the login
+      @$ '.title' .hide!
+      # Show the menu
+      @$ '.menu-selector' .fade-in 250_ms
+
     'click .menu-selector > .toggle-switch': (event) ->
       # !TODO: This here still propagates to the mousedown event.
       event.stop-propagation!
@@ -56,36 +81,54 @@ module.exports = class Canvas extends CollectionView
       # Toggle the state of the menu.
       @state.set \menu, not @state.get \menu
 
-    # "mousedown :not([class*='toggle'])": (event) ->
-    #   console.log event.src-element
-    #   if event.target is @$ \.toggle-switch
-    #     console.log \menu
+    'mousedown': (event) ->
+      # Govern the button that fired this event.
+      switch event.button
+      # Only catch the left mouse click
+      | 0 =>
+        # Fade out the title screen.
+        # @$ '.title' .fade-out 250_ms
 
-    #   switch event.button
-    #   # Only catch the left mouse click
-    #   | 0 =>
-    #     # Fade out the title screen.
-    #     @$ '.title' .fade-out 250_ms
+        # More custom logic.
+        console.log 'Instantiate a brush stroke?'
 
-    #     # More custom logic.
-    #     console.log 'Instantiate a brush stroke?'
+        # Set the timestamp on our model.
+        @model.set \changed, moment!
 
-    #   # We can add different functionality to other buttons.
-    #   | _ =>
-    #     # Let the model know that its time to change.
-    #     @model.set \changed, moment!
-    #     console.log 'Unreserved mouse action.'
+      # We can add different functionality to other buttons.
+      | _ =>
+        console.log 'Unreserved mouse action.'
 
-    'mouseup': (event) -> switch event.button
-    # Only catch the left mouse click
-    | 0 =>
-      @model.set \changed, moment!
-      # console.log @model
+    # Add a fake model to the canvas.
+    'click .menu-selector .add-fake': (event) ->
+      num = @collection.length
+      width = 140 + num
+      height = 100 + num
+      model = new chaplin.Model do
+        preview: "http://www.placekitten.com/#width/#height"
+        stroke_number: num
+        created: do
+          user: chaplin.mediator.settings.user
+          time: moment!
+
+      @collection.unshift model
+
+    'mouseup': (event) ->
+      # make sure we don't have the menu open.
+      unless @state.get \menu
+        switch event.button
+        # Only catch the left mouse click
+        | 0 =>
+          # I guess this is where we would end  the life of a
+          @update-canvas!
 
   initialize: (options = {}) ->
     super ...
 
     @state = options.state
+
+    @state.on 'change:user', (model) ~>
+      chaplin.mediator.settings.user = model.get \user
 
     # Check whe window on all keyup events.
     $ window .on 'keyup', (event) ~>
@@ -95,27 +138,20 @@ module.exports = class Canvas extends CollectionView
           # Undo function call here.
           console.log 'undo function'
 
-    $ window .on "mousedown :not([class*='toggle'])", (event) ~>
-      console.log event.src-element
-      if event.target is @$ \.toggle-switch
-        console.log \menu
-
-      switch event.button
-      # Only catch the left mouse click
-      | 0 =>
-        # Fade out the title screen.
-        @$ '.title' .fade-out 250_ms
-
-        # More custom logic.
-        console.log 'Instantiate a brush stroke?'
-
-      # We can add different functionality to other buttons.
-      | _ =>
-        # Let the model know that its time to change.
-        @model.set \changed, moment!
-        console.log 'Unreserved mouse action.'
+    # Listen to the add event on out canvas.
+    @collection.on 'add', (model) ~>
+      # Publish the new stroke to the strokes controller.
+      @publish-event 'stroke:add', model
 
   render: ->
     super ...
-    @$ '.title' .hide!
+
     @stickit @state, @state-bindings
+
+  update-canvas: ->
+    changes = @model.get \changed
+    change = do
+      user: chaplin.mediator.settings.user
+      time: moment!
+    changes = _.extend changes, change
+    @model.set \changed, changes

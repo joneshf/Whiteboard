@@ -1,5 +1,8 @@
 .title
-  %h1 Start Drawing Here
+  %form.user-form
+    %label{for: 'user-email'} Email
+    %input.user-email{name: 'user-email', type: 'email', required: true}
+    %button.btn.btn-success Start Drawing!
 
 .menu-selector
   .toggle-switch
@@ -21,7 +24,6 @@
     %li.share
       %i.icon-ticket
       %span Share
-
-.canvas-strokes
-
-%ul.items
+    %li.add-fake
+      %i.icon-plus
+      %span Add-fake

@@ -20,8 +20,10 @@ class Stroke extends ItemView
 
   bindings:
     '.created':
-      observe: \created
+      observe: \created.time
       on-get: -> moment it .format 'L LT'
+
+    '.author': \created.user
 
     '.preview':
       attributes: [
@@ -31,6 +33,25 @@ class Stroke extends ItemView
 
   #   # Maybe an image of the stroke? We can figure this out later.
   #   '.stroke': \path
+
+  events:
+    'click': (event) ->
+      # TODO: Maybe create a modal with a detail view of this stroke.
+      # This type of view implicates that a user can edit/remove this
+      # stroke.
+      # ---------------------------------------------------------------
+      # Remove: Gone!
+      # Edit: So many things to list. We can pack features in here.
+      #       With a menu detached from the canvas, this could possibly
+      #       mean a user could perform strokes on a stroke and add
+      #       them to the canvas on the fly. To me, this view will feel
+      #       like a smaller detached canvas with all of the features of
+      #       its parent. Implementing 'shift + click' could be a
+      #       really cool easter egg. What about 'ctrl + click' for
+      #       selecting a set of individual strokes? What about giving
+      #       the user an option to branch the detail view into a fresh
+      #       new Whiteboard? Marinate on that a bit.
+      console.log @model
 
 
 module.exports = class Strokes extends CollectionView
@@ -58,10 +79,8 @@ module.exports = class Strokes extends CollectionView
     'click .stroke-menu': (event) ->
       event.stop-propagation!
 
-      # Toggle the strokes preview
-
       # Toggle the stroke list.
-      @$ 'ul.stroke-items' .slide-toggle 250_ms
+      @$ 'ul.stroke-items' .slide-toggle 500_ms
       @$el.toggle-class \active
       # Toggle the state model.
       @stroke-state.set \menu, not @stroke-state.get \menu
@@ -72,5 +91,6 @@ module.exports = class Strokes extends CollectionView
 
   render: ->
     super ...
+    console.log \rendering-strokes
     @stickit @stroke-state, @state-bindings
 
