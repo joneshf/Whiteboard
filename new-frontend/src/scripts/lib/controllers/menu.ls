@@ -5,6 +5,7 @@ require! moment
 require! cookie
 
 require! MenuView: 'views/menu'
+require! CanvasView: 'views/canvas'
 
 module.exports = class Menu extends chaplin.Controller
 
@@ -17,54 +18,61 @@ module.exports = class Menu extends chaplin.Controller
       # Dummy model to observe open dropdowns with stickit.
       @model = new chaplin.Model
 
+      @state = new chaplin.Model {menu: false, user: ''}
+
       @view = new MenuView {
+        state: @state
         model: @model
         container: \body
         +auto-render
       }
 
-      # # The collection of strokes on this canvas.
-      # @collection = new chaplin.Collection
+      # Set the width and height of the canvas.
+      # TODO: Set these with the initial menu.
+      chaplin.mediator.settings.canvas_width = \900px
+      chaplin.mediator.settings.canvas_height = \500px
 
-      # @state = new chaplin.Model {menu: false, user: ''}
+      # The collection of strokes on this canvas.
+      @collection = new chaplin.Collection
 
-      # # Test canvas.
-      # @model = new chaplin.Model do
-      #   # The initial creator
-      #   created: do
-      #     user: \taystack@example.com
-      #     time: moment!
+      # Test canvas.
+      @canvas = new chaplin.Model do
+        # The initial creator
+        created: do
+          user: \taystack@example.com
+          time: moment!
 
-      #   # Track the changes for potential reversion tools.
-      #   changed: [
-      #     * user: \taystack@example.com
-      #       time: moment!
-      #     * user: \bla@example.com
-      #       time: moment!
-      #     * user: \pholey@example.com
-      #       time: moment!
-      #   ]
+        # Track the changes for potential reversion tools.
+        changed: [
+          * user: \taystack@example.com
+            time: moment!
+          * user: \bla@example.com
+            time: moment!
+          * user: \pholey@example.com
+            time: moment!
+        ]
 
-      #   # Some test contributors for display purposes.
-      #   contributors: [
-      #     * name: \taystack
-      #       email: \taystack@example.com
-      #       active: true
-      #       invited: false
-      #     * name: \pholey
-      #       email: \pholey@example.com
-      #       active: false
-      #       invited: true
-      #     * name: \bla
-      #       email: \bla@example.com
-      #       active: true
-      #       invited: false
-      #   ]
-      # @view = new HeaderView {
-      #   # user: @user
-      #   model: @model
-      #   collection: @collection
-      #   state: @state
-      #   container: \body
-      # }
-      # @view.render!
+        # Some test contributors for display purposes.
+        contributors: [
+          * name: \taystack
+            email: \taystack@example.com
+            active: true
+            invited: false
+          * name: \pholey
+            email: \pholey@example.com
+            active: false
+            invited: true
+          * name: \bla
+            email: \bla@example.com
+            active: true
+            invited: false
+        ]
+      @canvas-view = new CanvasView {
+        model: @model
+        collection: @collection
+        state: @state
+        region: \canvas-region
+      }
+
+      @subscribe-event 'render:canvas', ~>
+        @canvas-view.render!

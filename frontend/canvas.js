@@ -45,6 +45,11 @@ canvas_script = function(){
     canvas.actionCount = 0;
     canvas.users = {};
     canvas.brush = new Brush(brushRadius, Color(fillColor), canvas);
+
+
+    // Getting some info here;
+
+
     canvas.connection = new WebSocket('ws://localhost:9002/');
     canvas.connection.onopen = function(){
       canvas.connection.send(JSON.stringify({
@@ -62,7 +67,7 @@ canvas_script = function(){
         switch (message.action) {
         case 'join':
           canvas.users[message.id] = new User(message.id);
-          canvas.users[message.id].brush = new Brush(10, '#000000', canvas);
+          canvas.users[message.id].brush = new Brush(2, '#000000', canvas);
           break;
         case 'action-start':
           cur_user = canvas.users[message.id];
@@ -122,6 +127,7 @@ canvas_script = function(){
         action: 'action-data',
         data: [x, y]
       }));
+      // console.log('x',x,'y',y);
     };
     canvas.getLastFrameIndex = function(start_index){
       var i$, i;
@@ -211,6 +217,13 @@ canvas_script = function(){
         data: canvas.brush.getActionData()
       });
       canvas.brush.actionEnd();
+
+
+      // Evaluating the canvas for changes.
+      console.log("canvas history:", canvas.history);
+      // canvas.history contains an array of strokes on the canvas.
+
+
       canvas.redraw(canvas.history.length - 1, false);
       canvas.connection.send(JSON.stringify({
         id: canvas.id,

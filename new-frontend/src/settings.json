@@ -1,5 +1,9 @@
 {
   "uris": {
     "default": "/",
+  },
+  "canvas": {
+    "height": "500px",
+    "width": "900px",
   }
 }

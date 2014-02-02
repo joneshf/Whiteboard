@@ -60,27 +60,6 @@ module.exports = class Canvas extends CollectionView
   ctrl-z: (event)-> event.which is 90_z and event.ctrl-key
 
   events:
-    'submit': (event) ->
-      event.prevent-default!
-
-      # Let the strokes view know we are starting this thing.
-      @publish-event 'render:strokes', @state.get \user
-
-      # Hide the login
-      @$ '.title' .hide!
-      # Show the menu
-      @$ '.menu-selector' .fade-in 250_ms
-
-    'click .menu-selector > .toggle-switch': (event) ->
-      # !TODO: This here still propagates to the mousedown event.
-      event.stop-propagation!
-
-      # Toggle the menu.
-      @$ 'ul.menu-items' .slide-toggle 250_ms
-      @$ '.toggle-switch' .toggle-class \active
-      # Toggle the state of the menu.
-      @state.set \menu, not @state.get \menu
-
     'mousedown': (event) ->
       # Govern the button that fired this event.
       switch event.button
@@ -98,20 +77,6 @@ module.exports = class Canvas extends CollectionView
       # We can add different functionality to other buttons.
       | _ =>
         console.log 'Unreserved mouse action.'
-
-    # Add a fake model to the canvas.
-    'click .menu-selector .add-fake': (event) ->
-      num = @collection.length
-      width = 140 + num
-      height = 100 + num
-      model = new chaplin.Model do
-        preview: "http://www.placekitten.com/#width/#height"
-        stroke_number: num
-        created: do
-          user: chaplin.mediator.settings.user
-          time: moment!
-
-      @collection.unshift model
 
     'mouseup': (event) ->
       # make sure we don't have the menu open.

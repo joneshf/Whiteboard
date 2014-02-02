@@ -42,7 +42,7 @@ module.exports = class IndexController extends Controller
         user: chaplin.mediator.settings.user
         stroke-state: @stroke-state
         collection: @collection
-        region: \canvas:strokes
+        region: \stroke-region
         +auto-render
       }
 
