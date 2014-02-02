@@ -61,6 +61,11 @@ module.exports = class Canvas extends CollectionView
 
   events:
     'mousedown': (event) ->
+
+      console.log event
+
+      changes = @model.get \changed
+
       # Govern the button that fired this event.
       switch event.button
       # Only catch the left mouse click
@@ -72,7 +77,13 @@ module.exports = class Canvas extends CollectionView
         console.log 'Instantiate a brush stroke?'
 
         # Set the timestamp on our model.
-        @model.set \changed, moment!
+        @model.set {
+          changed:
+            user: chaplin.mediator.settings.user
+            time: moment!
+        }
+
+        console.log @model
 
       # We can add different functionality to other buttons.
       | _ =>
@@ -112,6 +123,8 @@ module.exports = class Canvas extends CollectionView
     super ...
 
     @stickit @state, @state-bindings
+
+    @publish-event 'render:strokes'
 
   update-canvas: ->
     changes = @model.get \changed

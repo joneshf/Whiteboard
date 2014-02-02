@@ -4,4 +4,6 @@ $namespace: 'canvas';
 // -----------------------------
 ##{$namespace} {
   @extend .overlay;
+  top: $wb-menu-height;
+  z-index: 10;
 }

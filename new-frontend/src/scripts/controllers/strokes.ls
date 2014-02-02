@@ -23,26 +23,28 @@ module.exports = class IndexController extends Controller
     @subscribe-event 'stroke:add', (model) ~>
       @collection.unshift model
 
-    @subscribe-event 'render:strokes', (user) ~>
+    # @subscribe-event 'render:strokes', ~>
 
-      for num in [1 til 10]
-        width = 140 + num
-        height = 100 + num
-        model = new chaplin.Model {
-          preview: "http://www.placekitten.com/#width/#height"
-          stroke_number: num
-          created: do
-            user: chaplin.mediator.settings.user
-            time: moment!
-        }
-        # Add the most recent stroke to the top of the list.
-        @collection.unshift model
+    console.log 'rendering strokes'
 
-      @view = new StrokesView {
-        user: chaplin.mediator.settings.user
-        stroke-state: @stroke-state
-        collection: @collection
-        region: \stroke-region
-        +auto-render
+    for num in [1 til 10]
+      width = 140 + num
+      height = 100 + num
+      model = new chaplin.Model {
+        preview: "http://www.placekitten.com/#width/#height"
+        stroke_number: num
+        created: do
+          user: chaplin.mediator.settings.user
+          time: moment!
       }
+      # Add the most recent stroke to the top of the list.
+      @collection.unshift model
+
+    @view = new StrokesView {
+      user: chaplin.mediator.settings.user
+      stroke-state: @stroke-state
+      collection: @collection
+      region: \region:strokes
+      +auto-render
+    }
 

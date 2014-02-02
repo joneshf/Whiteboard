@@ -79,14 +79,12 @@ $FontAwesomePath: "/components/font-awesome/font";
 // @import "components/bootstrap-sass/lib/utilities";
 // @import "components/bootstrap-sass/lib/responsive";
 
-// Fonts
-// =====
-
 // Local
 // =====
 
 // Variables
 // ---------
+$wb-menu-height: 30px;
 $wb-font-color: #444;
 $wb-font-family: 'Source Sans Pro', sans-serif;
 $wb-border: 1px solid rgba(#555, 0.3);
@@ -98,4 +96,5 @@ $wb-active-text: #179ef8;
 @import "views/menu";
 @import "views/canvas";
 @import "views/strokes";
+@import "vendor/cursors";
 

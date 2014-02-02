@@ -46,10 +46,13 @@ module.exports = class Menu extends chaplin.Controller
         changed: [
           * user: \taystack@example.com
             time: moment!
+            stroke: 1
           * user: \bla@example.com
             time: moment!
+            stroke: 2
           * user: \pholey@example.com
             time: moment!
+            stroke: 3
         ]
 
         # Some test contributors for display purposes.
@@ -67,12 +70,15 @@ module.exports = class Menu extends chaplin.Controller
             active: true
             invited: false
         ]
-      @canvas-view = new CanvasView {
-        model: @model
-        collection: @collection
-        state: @state
-        region: \canvas-region
+
+      @canvas-state = new chaplin.Model {
+        is-drawing: false
       }
 
-      @subscribe-event 'render:canvas', ~>
-        @canvas-view.render!
+      @canvas-view = new CanvasView {
+        state: @canvas-state
+        model: @model
+        collection: @collection
+        region: \region:canvas
+      }
+      @canvas-view.render!

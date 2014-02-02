@@ -9,22 +9,39 @@ $namespace: 'menu';
   left: 0px;
   right: 0px;
 }
-
+##{$namespace} {
+  border-bottom: $wb-border;
+  display: block;
+  z-index: 100;
+}
 ##{$namespace} .title {
   @extend .overlay;
+}
+
+// App title styling.
+// ------------------
+##{$namespace} .wb-title {
+  display: inline-block;
+  text-align: center;
+  width: 50%;
+  @include wb-font($size: 14pt);
 }
 
 // Menu styling.
 // -------------
 ##{$namespace} .menu-selector {
-  cursor: pointer;
-  display: none;
+  cursor: url(http://cur.cursors-4u.net/games/gam-15/gam1419.cur), auto;
+
+  // cursor: pointer;
+  display: inline-block;
   padding-left: 5px;
   width: 150px;
+  z-index: 100;
+  &:visible { display: inline-block; }
   @include wb-font($size: 14pt);
 }
 ##{$namespace} .menu-selector .toggle-switch {
-  border-bottom: $wb-border;
+  // border-bottom: $wb-border;
   padding: 3px;
   @include user-select(none);
   &:hover, &.active {
@@ -38,6 +55,9 @@ $namespace: 'menu';
   display: none;
   margin: 0px;
   padding: 0px;
+  position: absolute;
+  width: 147px;
+  z-index: 1000;
 }
 ##{$namespace} .menu-selector .menu-items li {
   border-bottom: $wb-border;

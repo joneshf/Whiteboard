@@ -17,8 +17,8 @@ module.exports = class Menu extends View
   template: Template
 
   regions:
-    'canvas-region': \.canvas-region
-    'stroke-region': \.stroke-region
+    'region:canvas': \.canvas-region
+    'region:strokes': \.stroke-dropdown
 
   events:
     'submit': (event) ->
@@ -62,7 +62,9 @@ module.exports = class Menu extends View
     super ...
 
     @$ '.title' .hide!
-    @$ '.menu-selector' .fade-in 250_ms
+    # @$ '.menu-selector' .fade-in 250_ms
+
+    @publish-event 'render:canvas'
 
 
   initialize: (options = {}) ->

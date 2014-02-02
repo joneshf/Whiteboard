@@ -1,8 +1,10 @@
-$namespace: 'canvas-strokes';
+$namespace: 'stroke-dropdown';
 
 .#{$namespace} {
-  bottom: 2px;
-  cursor: pointer;
+  // bottom: 2px;
+  cursor: url(http://cur.cursors-4u.net/games/gam-15/gam1419.cur), auto;
+
+  // cursor: pointer;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 3px;
@@ -11,6 +13,7 @@ $namespace: 'canvas-strokes';
   right: 5px;
   top: 0px;
   width: 156px;
+  z-index: 200;
   @include wb-font($size: 14pt);
 }
 .#{$namespace} #strokes-list {
@@ -19,8 +22,8 @@ $namespace: 'canvas-strokes';
   }
 }
 .#{$namespace} #strokes-list .stroke-menu {
-  border-bottom: $wb-border;
-  height: 30px;
+  // border-bottom: $wb-border;
+  height: 28px;
   line-height: 30px;
   min-width: 150px;
   & > span {
@@ -34,7 +37,7 @@ $namespace: 'canvas-strokes';
 .#{$namespace} #strokes-list .stroke-items {
   display: none;
   list-style-type: none;
-  margin: 0px;
+  // margin: 0px;
   padding: 0px;
   // &:visible {  }
 }

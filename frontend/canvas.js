@@ -51,6 +51,7 @@ canvas_script = function(){
 
 
     canvas.connection = new WebSocket('ws://localhost:9002/');
+    debugger;
     canvas.connection.onopen = function(){
       canvas.connection.send(JSON.stringify({
         id: canvas.id,
