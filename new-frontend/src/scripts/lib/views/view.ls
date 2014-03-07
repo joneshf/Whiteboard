@@ -17,6 +17,9 @@ module.exports = class View extends chaplin.View
   # The passed in data for the view.
   _view-data: {}
 
+  # State bindings!
+  state-bindings: {}
+
   #! Extend this to provide the precompiled template.
   #! eg. `template: require 'templates/index'`
   template: -> ''

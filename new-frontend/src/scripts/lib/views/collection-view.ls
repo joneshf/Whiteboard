@@ -14,8 +14,15 @@ module.exports = class CollectionView extends chaplin.CollectionView
   # Don't automatically render.
   auto-render: false
 
+  # Don't automatically render all item views.  We want to do that after
+  # stickit initialization.
+  render-items: false
+
   # Template rendering context.
   context: {}
+
+  # State bindings!
+  state-bindings: {}
 
   # The passed in data for the view.
   _view-data: {}
@@ -36,6 +43,7 @@ module.exports = class CollectionView extends chaplin.CollectionView
 
   ->
     @state = new chaplin.Model
+    super ...
 
   initialize: (@options = {}) ->
     super ...
@@ -48,6 +56,9 @@ module.exports = class CollectionView extends chaplin.CollectionView
 
     # Apply basic stickit bindings.
     @stickit! if @autoStickit and @bindings and @model
+
+    # Render subviews now that stickit has had a chance to initialize.
+    @renderAllItems!
 
   dispose: ->
     return if @disposed
