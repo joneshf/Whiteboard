@@ -5,8 +5,8 @@ require! chaplin
 
 module.exports = class View extends chaplin.View
 
-  # Default the container to be the body.
-  container: 'body'
+  # Default to create a div when we create these things.
+  tagname: \div
 
   # Automatically apply stickit bindings.
   auto-stickit: true
@@ -25,6 +25,10 @@ module.exports = class View extends chaplin.View
     # Grab the original template data,
     # and stuff our context stuff into it.
     (super ...) <<< (_.result this, 'context') <<< _.result this, '_viewData'
+
+  ->
+    @state = new chaplin.Model
+    super ...
 
   get-template-function: ->
     # Return the template function to hook into
@@ -59,4 +63,7 @@ module.exports = class View extends chaplin.View
     # Unstick our models.
     @unstickit! if @auto-stickit and @bindings and @model
 
+    # Dispose the internal state.
+    state = @state
     super ...
+    state.dispose!

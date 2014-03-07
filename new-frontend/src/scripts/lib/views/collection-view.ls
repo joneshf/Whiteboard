@@ -34,6 +34,9 @@ module.exports = class CollectionView extends chaplin.CollectionView
     # chaplin's template system.
     @template
 
+  ->
+    @state = new chaplin.Model
+
   initialize: (@options = {}) ->
     super ...
     # Copy any thing from the passed in context into the view's context.
@@ -49,4 +52,9 @@ module.exports = class CollectionView extends chaplin.CollectionView
   dispose: ->
     return if @disposed
     @unstickit! if @autoStickit and @bindings and @model
+
+    state = @state
+
     super ...
+
+    state.dispose!

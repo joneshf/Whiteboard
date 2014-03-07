@@ -47,4 +47,4 @@ require.config do
 
 require <[ application ]>, (Application) ->
   # Instantiate the application and begin the execution cycle.
-  new Application!
+  window.chaplin-app = new Application!

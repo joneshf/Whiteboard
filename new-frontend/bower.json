@@ -4,7 +4,7 @@
   "dependencies": {
     "backbone.stickit": "0.6.3",
     "bourbon": "3.1.x",
-    "chaplin": "0.11.x",
+    "chaplin": "1.0.x",
     "exoskeleton": "0.6.x",
     "font-awesome": "3.2.x",
     "jquery": "2.0.x",
